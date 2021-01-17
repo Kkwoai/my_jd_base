@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 ## Author: Evine Deng
-## Source: https://github.com/EvineDeng/jd-base
-## Modified： 2021-01-16
+## Source: https://github.com/Kkwoai/jd-base
+## Modified： 2021-01-17
 ## Version： v3.5.3
 
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
@@ -42,13 +42,13 @@ SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 WhichDep=$(grep "/jd-base" "${ShellDir}/.git/config")
 
-if [[ ${WhichDep} == *github* ]]; then
-  ScriptsURL=https://github.com/LXK9301/jd_scripts
-  ShellURL=https://github.com/EvineDeng/jd-base
-else
-  ScriptsURL=https://gitee.com/lxk0301/jd_scripts
-  ShellURL=https://gitee.com/evine/jd-base
-fi
+# if [[ ${WhichDep} == *github* ]]; then
+ScriptsURL=https://github.com/LXK9301/jd_scripts
+ShellURL=https://github.com/Kkwoai/jd-base
+# else
+#   ScriptsURL=https://gitee.com/lxk0301/jd_scripts
+#   ShellURL=https://gitee.com/Kkwoai/jd-base
+# fi
 
 ## 更新shell脚本
 function Git_PullShell {
