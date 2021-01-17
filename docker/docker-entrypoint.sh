@@ -3,15 +3,15 @@ set -e
 
 echo -e "\n========================1. 更新源代码========================\n"
 
-WhichDep=$(grep "/jd-base" "${JD_DIR}/.git/config")
-echo -e "\n========================2. 更新源代码========================\n"
-if [[ ${WhichDep} == *github* ]]; then
-  ScriptsURL=https://github.com/LXK9301/jd_scripts
-  ShellURL=https://github.com/Kkwoai/my_jd_base
-else
-  ScriptsURL=https://gitee.com/lxk0301/jd_scripts
-  ShellURL=https://gitee.com/evine/jd-base
-fi
+# WhichDep=$(grep "/jd-base" "${JD_DIR}/.git/config")
+# echo -e "\n========================2. 更新源代码========================\n"
+# if [[ ${WhichDep} == *github* ]]; then
+ScriptsURL=https://github.com/LXK9301/jd_scripts
+ShellURL=https://github.com/Kkwoai/my_jd_base
+# else
+#   ScriptsURL=https://gitee.com/lxk0301/jd_scripts
+#   ShellURL=https://gitee.com/evine/jd-base
+# fi
 
 echo -e "更新shell脚本，原地址：${ShellURL}\n"
 cd ${JD_DIR}
