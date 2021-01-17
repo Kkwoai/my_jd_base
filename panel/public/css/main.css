@@ -7,9 +7,25 @@ html {
 
 h1,
 ul {
-    margin: .3em 0 .3em 0;
-    font-size: 1.5rem;
-    padding-right: 1rem;
+    margin: .3em 0 .3em 0 !important;
+    font-size: 1.5rem !important;
+    padding-right: 1rem !important;
+}
+
+.diffs .myh1 {
+    margin: .3em 0 .3em 0 !important;
+    font-size: 1.5rem !important;
+    padding-right: 1rem !important;
+    font-weight: bold;
+}
+
+.diffs .myh4 {
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
 }
 
 h4 {
@@ -75,10 +91,10 @@ nav .active a {
 }
 
 .diffs .compare-wrapper,
-.diffs .wrapper {
+/* .diffs .wrapper {
     flex: 1 1 auto;
     position: relative;
-}
+} */
 
 .diffs .compare-wrapper #compare {
     position: absolute;
@@ -93,7 +109,19 @@ nav .active a {
 .wrapper .CodeMirror {
     position: absolute;
     height: calc(100% - 0.5em);
-    width: 100%
+    width: 99%
+}
+
+.compare-wrapper{
+    top:158px !important
+}
+
+.layui-side{ 
+    top:158px !important
+}
+
+.layui-body{
+    top:158px !important
 }
 
 .mergely-column .CodeMirror {
