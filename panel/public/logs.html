@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线编辑工具</title>
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/codemirror.min.js"></script>
+    <script type="text/javascript" src="./js/shell.js"></script>
+    <script type="text/javascript" src="./js/sweetalert2.js"></script>
+    <script type="text/javascript" src="./js/qrcode.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/codemirror.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/twilight.css">
+    <link rel="stylesheet" type="text/css" href="./css/dracula.css">
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="diffs">
+            <nav>
+                <ul>
+                    <li ><a href="/home">首页</a></li>
+                    <li><a href="/crontab">定时设定</a></li>
+                    <li><a href="/diff">对比工具</a></li>
+                    <li class="active"><a href="/log">日志</a></li>
+                    <li><a href="/changepwd">修改密码</a></li>
+                    <li><a href="/logout">退出</a></li>
+                </ul>
+            </nav>
+            <header>
+                <h1 class="myh1">在线日志查看工具</h1>
+            
+            </header>
+            <h4 class="myh4">默认日志目录</h4>
+            <div class="layui-side layui-bg-black">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree " lay-filter="nav">
+                        <!-- <li class="layui-nav-item"><a href="./crontab.html">定时设置</a></li>
+                        <li class="layui-nav-item"><a href="./diff.html">对比工具</a></li> -->
+                        <li id="log" class="layui-nav-item">
+                            <a href="javascript:;">日志</a>
+                          
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="layui-body">
+                <!-- 内容主体区域 -->
+                <div class="wrapper">
+                    <div style="padding-left: 15px;"><textarea id="code" name="code"></textarea></div>
+                </div>
+    
+            </div>
+    
+        </div>
+    </div>
+    <script src="./layui/layui.js"></script>
+    <script>
+      //JavaScript代码区域
+      layui.use('element', function () {
+            var element = layui.element;
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                lineWrapping: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+                mode: 'shell',
+                theme: 'dracula'
+            });
+
+            $.get("/api/log", function (data) {
+               
+                if (data != null) {
+                    getMenus(data);
+                    element.render('nav');
+                } else {
+                    layer.alert("权限不足，请联系管理员", function () {
+                       
+                    });
+                }
+            });
+            element.on("nav(nav)", function (data) {
+
+                if ($(this).attr("isFile")) {
+                    editor.setValue("");
+                    editor.clearHistory();
+                    var params = {}
+                    if ($(this).attr("parent")) {
+                        params = { "parent": $(this).attr("parent"), "fileName": $(this).attr("class") }
+                    } else {
+                        params = { "fileName": $(this).attr("class") }
+                    }
+                    $.get("/api/logFile/", params, function (res) {
+                        editor.setValue(res);
+                    });
+                }
+
+            });
+
+        });
+
+        var getMenus = function (data) {
+            var dl = $("<dl class='layui-nav-child'>")
+            for (var i = 0; i < data.length; i++) {
+                var node = data[i]['name'];
+                var dd = $("<dd></dd>");
+                //获取子节点
+                if (data[i]["isDirectory"]) {
+                    var childArry = data[i]['children'];
+                    var a = $("<a class='" + node + "' href='javascript:;'>" + node + "</a>");
+                    dd.append(a);
+                    if (childArry.length > 0) {
+                        a.append("<span class='layui-nav-more'></span>");
+                        var dl1 = $("<dl class='layui-nav-child'></dl>");
+                        for (var y in childArry) {
+                            var dd1 = $("<dd><a class='" + childArry[y] + "'" + "parent='" + node + "'" + "isFile='true'" + " href='javascript:;'>" + childArry[y] + "</a></dd>");
+                            dl1.append(dd1);
+                        }
+                        dd.append(dl1);
+                    }
+
+                } else {
+                    var a = $("<a class='" + node + "'" + "isFile='true'" + "' href='javascript:;'>" + node + "</a>");
+                    dd.append(a);
+                }
+
+                dl.append(dd);
+            }
+            $("#log").append(dl);
+        }
+
+    </script>
+
+</body>
+
+</html>
