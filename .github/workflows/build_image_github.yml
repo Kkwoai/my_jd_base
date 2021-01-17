@@ -16,7 +16,7 @@ jobs:
           publish: true
           imageName: kkwoai/myjd
           dockerFile: docker/github/Dockerfile
-          platform: linux/amd64,linux/arm64
+          platform: linux/amd64
           tag: latest,github
           dockerUser: ${{ secrets.DOCKER_USERNAME }}
           dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
