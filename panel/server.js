@@ -24,6 +24,8 @@ var crontabFile = path.join(rootPath,'config/crontab.list');
 var confBakDir = path.join(rootPath,'config/bak/');;
 // auth.json 文件目录
 var authConfigFile = path.join(rootPath,'config/auth.json');
+// logs文件目录
+var logs = path.join(rootPath,'log/');
 
 var authError = "错误的用户名密码，请重试";
 var loginFaild = "请先登录!";
@@ -238,6 +240,50 @@ function saveNewConf(file, content) {
 function getFileContentByName(fileName) {
     if (fs.existsSync(fileName)) {
         return fs.readFileSync(fileName, 'utf8');
+    }
+    return '';
+}
+
+
+/**
+ * 获取log文件夹名称
+ * @param path 文件夹路径
+ * @returns {string}
+ */
+function isDirectory(path) {
+  
+    let stat = fs.statSync(path)
+    if (stat.isDirectory() === true) { 
+        return true
+      }
+    return false
+
+}
+
+/**
+ * 获取log文件夹名称
+ * @returns {string}
+ */
+function getLogMenu() {
+  
+    let components = []
+    const files = fs.readdirSync(logs)
+
+    if (files) {
+        files.forEach(function (item, index) {
+            let stat = fs.statSync(logs + item)
+            if (stat.isDirectory() === true) { 
+              let children = []
+                 const chlidFiles = fs.readdirSync(logs + item)
+                 chlidFiles.forEach(function(file,index){
+                   children.push(file)
+                 })
+              components.push({"name":item,"isDirectory":true,"children":children})
+            }else{
+              components.push({"name":item,"isDirectory":false})
+            }      
+        })
+        return components;
     }
     return '';
 }
@@ -465,6 +511,49 @@ app.post('/api/save', function (request, response) {
 
 });
 
+/**
+ * 日志菜单
+ */
+
+app.get('/api/log', function (request, response) {
+    if (request.session.loggedin) {
+        response.send(getLogMenu());
+    } else {
+        response.send({ err: 1, title:"保存失败! ",msg: loginFaild });
+    }
+
+});
+
+/**
+ * 获取日志文件
+ */
+
+app.get('/api/logFile/', function (request, response) {
+    if (request.session.loggedin) {
+        if(!request.query.parent){
+            var content = getFileContentByName(logs+request.query.fileName)
+            
+        }else{
+            var content = getFileContentByName(logs+request.query.parent+"/"+request.query.fileName)
+        }
+        response.send(content);
+    } else {
+        response.send(loginFaild);
+    }
+})
+
+
+/**
+ * 日志 页面
+ */
+app.get('/log', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(path.join(__dirname + '/public/logs.html'));
+    } else {
+        response.redirect('/');
+    }
+
+});
 checkConfigFile()
 
 app.listen(5678, () => {
