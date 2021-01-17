@@ -4,7 +4,7 @@ set -e
 echo -e "\n========================1. 更新源代码========================\n"
 
 WhichDep=$(grep "/jd-base" "${JD_DIR}/.git/config")
-
+echo -e "\n========================2. 更新源代码========================\n"
 if [[ ${WhichDep} == *github* ]]; then
   ScriptsURL=https://github.com/LXK9301/jd_scripts
   ShellURL=https://github.com/Kkwoai/my_jd_base
