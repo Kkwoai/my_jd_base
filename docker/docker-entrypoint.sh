@@ -23,7 +23,7 @@ if [ -d ${JD_DIR}/scripts/.git ]; then
   echo -e "更新JS脚本，原地址：${ScriptsURL}\n"
   cd ${JD_DIR}/scripts
   git fetch --all
-  git reset --hard origin/master
+  git reset --hard origin/my_jd_scripts
 else
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
   git clone -b master ${ScriptsURL} ${JD_DIR}/scripts
