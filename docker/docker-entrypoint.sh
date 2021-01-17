@@ -26,7 +26,7 @@ if [ -d ${JD_DIR}/scripts/.git ]; then
   git reset --hard origin/my_jd_scripts
 else
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
-  git clone -b master ${ScriptsURL} ${JD_DIR}/scripts
+  git clone -b my_jd_scripts ${ScriptsURL} ${JD_DIR}/scripts
 fi
 echo
 [ ! -d ${JD_DIR}/log ] && mkdir -p ${JD_DIR}/log
