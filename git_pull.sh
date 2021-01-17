@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ## Author: Evine Deng
-## Source: https://github.com/Kkwoai/jd-base
+## Source: https://github.com/Kkwoai/my_jd_base
 ## Modified： 2021-01-17
 ## Version： v3.5.3
 
@@ -43,8 +43,8 @@ isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 WhichDep=$(grep "/jd-base" "${ShellDir}/.git/config")
 
 # if [[ ${WhichDep} == *github* ]]; then
-ScriptsURL=https://github.com/LXK9301/jd_scripts
-ShellURL=https://github.com/Kkwoai/jd-base
+ScriptsURL=https://github.com/Kkwoai/my_jd_scripts
+ShellURL=https://github.com/Kkwoai/my_jd_base
 # else
 #   ScriptsURL=https://gitee.com/lxk0301/jd_scripts
 #   ShellURL=https://gitee.com/Kkwoai/jd-base
@@ -56,13 +56,13 @@ function Git_PullShell {
   cd ${ShellDir}
   git fetch --all
   ExitStatusShell=$?
-  git reset --hard origin/v3
+  git reset --hard origin/mybranch
 }
 
 ## 克隆js脚本
 function Git_CloneScripts {
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
-  git clone -b master ${ScriptsURL} ${ScriptsDir}
+  git clone -b my_jd_scripts ${ScriptsURL} ${ScriptsDir}
   ExitStatusScripts=$?
   echo
 }
@@ -73,7 +73,7 @@ function Git_PullScripts {
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
-  git reset --hard origin/master
+  git reset --hard origin/my_jd_scripts
   echo
 }
 
