@@ -22,11 +22,13 @@ echo
 if [ -d ${JD_DIR}/scripts/.git ]; then
   echo -e "更新JS脚本，原地址：${ScriptsURL}\n"
   cd ${JD_DIR}/scripts
+  PackageListOld=$(cat package.json)
   git fetch --all
   git reset --hard origin/my_jd_scripts
 else
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
   git clone -b my_jd_scripts ${ScriptsURL} ${JD_DIR}/scripts
+
 fi
 echo
 [ ! -d ${JD_DIR}/log ] && mkdir -p ${JD_DIR}/log
@@ -70,7 +72,7 @@ echo -e "========================3. 启动挂机程序========================\n
 if [[ ${ENABLE_HANGUP} == true ]]; then
   . ${JD_DIR}/config/config.sh
   if [ -n "${Cookie1}" ]; then
-    bash jd hangup
+    bash jd hangup 2>/dev/null
     echo -e "挂机程序启动成功...\n"
   else
     echo -e "config.sh中还未填入有效的Cookie，可能是首次部署容器，因此不启动挂机程序...\n"

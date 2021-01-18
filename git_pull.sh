@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 
 ## Author: Evine Deng
+<<<<<<< HEAD
 ## Source: https://github.com/Kkwoai/my_jd_base
 ## Modified： 2021-01-17
 ## Version： v3.5.3
+=======
+## Source: https://github.com/EvineDeng/jd-base
+## Modified： 2021-01-18
+## Version： v3.5.5
+>>>>>>> v3
 
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
-if [ -f /proc/1/cgroup ]
-then
-  isDocker=$(cat /proc/1/cgroup | grep docker)
-else
-  isDocker=""
-fi
-
-if [ -z "${isDocker}" ]
+if [ -z "${JD_DIR}" ]
 then
   ShellDir=$(cd $(dirname $0); pwd)
   ShellJd=${ShellDir}/jd.sh
@@ -117,8 +116,10 @@ function Change_JoyRunPins {
 function Change_InviteCode {
   CodeZz="  'Sy7sqHks\@Sa0zZlJapLMZw9pdDQnOoo2clfysC8H5a\@S5KkcRhgdoAeEI0jznP4OcQ\@SvPp0RRoR_VHRT0c\@S5KkcRkhIoFaGdhr8lvADfA',\n  'S5KkcRkpK8QLWdU7ykvMIdw\@SaG_llbW3LM1L9qFNQWOgo2Qw\@SaXzwlYqOIvhb-KpFTXua\@Sy7sqHksZ9VM',"
   CodeJoy=",\n  'i7J-rBjC1cY=\@9Lz36oup9_3x1O3gdANrI0MGRhplILGlq33N3lhoF4Q=\@TZaj4q_GSarkd-u40-hYJg==\@aEYNdH9WkHKZzdje-aDvWqt9zd5YaBeE\@7ZiMxCUnP2Orfc3eWGgXhA==',\n  'ZKfuxUZxKdGbDxTmAHnqkqt9zd5YaBeE\@xWXlN8vLwpFOy71e_SEYsg==\@ym8TOcaoUTQnJZKpDzKWd6t9zd5YaBeE\@9_dxd9S1-R7nohQ1FGiupUGIzB-QNOGN'"
+  CodeNian=",\n  'cgxZWifbeu-Wpm2AD0bol5Cu\@cgxZ-tAo8DJqM5xu3ogeOY7OXkOQ2Lw_ympGPITqNcceAad8Y1ph2UOXS-LOq3PUCqmgYjpt-td3CYw18qw\@cgxZdTXtIrzev12aC1eu5yr9cCz6N7HkgPrFkYPPzBDaaWjtjA3fokuFPMA\@cgxZLWaFIb7S4gvPZ1jlo3Ru3_zhiy3nnTsS4mQaaZc\@cgxZdTXtIuyLvwyYXgWh7YMhXtAVbaE0Ozjf2OUdEJZsvB1JgZ-5v5F_bDc',\n  'cgxZWifbeu_a6gmFRGbg6Lh1SmQdF0DUmQ\@cgxZdTXtIu6J7ljIXVGv6VoOs61gdyYXgT0ctAtCCykLsWw5accav11_0dI\@cgxZ-fMU8RF0M5dV3r4QOsLKNQRnjyuoh9haQkLPPMH6fJjgVIkoZy5ww_K-I2JJ\@cgxZ-OAB8S5NPaJF0LUYNl1oYE9tdRYPs2e2kWz3RrqEMgqutLWhZlw'"
   perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+\n\])|\1${CodeZz}\n\2|" ${ScriptsDir}/jd_jdzz.js >/dev/null 2>&1
   perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+)(\n\];?)|\1\2${CodeJoy}\3|" ${ScriptsDir}/jd_crazy_joy.js >/dev/null 2>&1
+  perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+)(\n\];?)|\1\2${CodeNian}${CodeNian}\3|" ${ScriptsDir}/jd_nian.js >/dev/null 2>&1
 }
 
 ## 修改lxk0301大佬js文件的函数汇总
@@ -140,7 +141,7 @@ function Change_ALL {
 ## js-drop.list 如果 scripts/docker/crontab_list.sh 删除了定时任务，这个文件内容将不为空
 function Diff_Cron {
   if [ -f ${ListCron} ]; then
-    if [ -n "${isDocker}" ]
+    if [ -n "${JD_DIR}" ]
     then
       grep -E " j[drx]_\w+" ${ListCron} | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | uniq | sort > ${ListTask}
     else
@@ -322,12 +323,14 @@ function Add_Cron {
 ## 每天12:00后运行git_pull.sh时随机生成第二天上行执行git_pull.sh的任务时间，生成的时间范围：7:00-11:59
 ## 不影响手动执行，手动执行会刷新下一次git_pull.sh的执行时间
 function Update_Cron {
-  RanMin=$((${RANDOM} % 60))
-  if [ $(date "+%H") -ge 12 ]; then
-    RanHour=$((${RANDOM} % 5 + 7))
-  else
-    RanHour=$((${RANDOM} % 8 + 13))
-  fi
+  # RanMin=$((${RANDOM} % 60))
+  # if [ $(date "+%H") -ge 12 ]; then
+  #   RanHour=$((${RANDOM} % 5 + 7))
+  # else
+  #   RanHour=$((${RANDOM} % 8 + 13))
+  # fi
+  RanMin=55
+  RanHour="5-23"
   perl -i -pe "{s|18 10,14(.+jd_joy_run.*)|18 11,14\1|; s|10 10,11(.+jd_joy_run.*)|18 11,14\1|; s|.+(bash.+git_pull.*)|${RanMin} ${RanHour} * * * \1|; s|bash bash |bash |}" ${ListCron}
   crontab ${ListCron}
 }
@@ -352,7 +355,7 @@ VerConfSample=$(grep " Version: " ${FileConfSample} | perl -pe "s|.+v((\d+\.?){3
 if [ ${ExitStatusShell} -eq 0 ]
 then
   echo -e "\nshell脚本更新完成...\n"
-  if [ -n "${isDocker}" ] && [ -d ${ConfigDir} ]; then
+  if [ -n "${JD_DIR}" ] && [ -d ${ConfigDir} ]; then
     cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
   fi
 else
