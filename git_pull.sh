@@ -20,11 +20,14 @@ LogDir=${ShellDir}/log
 [ ! -d ${LogDir} ] && mkdir -p ${LogDir}
 
 ScriptsDir=${ShellDir}/scripts
+Scripts2Dir=${ShellDir}/scripts2
 ConfigDir=${ShellDir}/config
 FileConf=${ConfigDir}/config.sh
 FileDiy=${ConfigDir}/diy.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
 ListCron=${ConfigDir}/crontab.list
+ListCronLxk=${ScriptsDir}/docker/crontab_list.sh
+ListCronShylocks=${Scripts2Dir}/docker/crontab_list.sh
 ListTask=${LogDir}/task.list
 ListJs=${LogDir}/js.list
 ListJsAdd=${LogDir}/js-add.list
@@ -35,6 +38,7 @@ ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
 WhichDep=$(grep "/jd-base" "${ShellDir}/.git/config")
+Scripts2URL=https://github.com/shylocks/Loon
 
 # if [[ ${WhichDep} == *github* ]]; then
 ScriptsURL=https://github.com/Kkwoai/my_jd_scripts
@@ -53,7 +57,7 @@ function Git_PullShell {
   git reset --hard origin/mybranch
 }
 
-## 克隆js脚本
+## 克隆scripts
 function Git_CloneScripts {
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
   git clone -b my_jd_scripts ${ScriptsURL} ${ScriptsDir}
@@ -61,9 +65,9 @@ function Git_CloneScripts {
   echo
 }
 
-## 更新js脚本
+## 更新scripts
 function Git_PullScripts {
-  echo -e "更新JS脚本，原地址：${ScriptsURL}\n"
+  echo -e "更新LXK9301脚本，原地址：${ScriptsURL}\n"
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
@@ -71,16 +75,34 @@ function Git_PullScripts {
   echo
 }
 
+## 克隆scripts2
+function Git_CloneScripts2 {
+  echo -e "克隆shylocks脚本，原地址：${Scripts2URL}\n"
+  git clone -b main ${Scripts2URL} ${Scripts2Dir}
+  ExitStatusScripts2=$?
+  echo
+}
+
+## 更新scripts2
+function Git_PullScripts2 {
+  echo -e "更新shylocks脚本，原地址：${Scripts2URL}\n"
+  cd ${Scripts2Dir}
+  git fetch --all
+  ExitStatusScripts2=$?
+  git reset --hard origin/main
+  echo
+}
+
 ## 用户数量UserSum
 function Count_UserSum {
   i=1
-  while [ ${i} -le 1000 ]
+  while [ $i -le 1000 ]
   do
-    TmpCK=Cookie${i}
-    eval CookieTmp=$(echo \$${TmpCK})
+    Tmp=Cookie$i
+    CookieTmp=${!Tmp}
     if [ -n "${CookieTmp}" ]
     then
-      UserSum=${i}
+      UserSum=$i
     else
       break
     fi
@@ -93,10 +115,10 @@ function Count_UserSum {
 function Change_JoyRunPins {
   j=${UserSum}
   PinALL=""
-  while [ ${j} -ge 1 ]
+  while [ $j -ge 1 ]
   do
-    TmpCK=Cookie${j}
-    eval CookieTemp=$(echo \$${TmpCK})
+    Tmp=Cookie$j
+    CookieTemp=${!Tmp}
     PinTemp=$(echo ${CookieTemp} | perl -pe "{s|.*pt_pin=(.+);|\1|; s|%|\\\x|g}")
     PinTempFormat=$(printf ${PinTemp})
     PinALL="${PinTempFormat},${PinALL}"
@@ -109,12 +131,8 @@ function Change_JoyRunPins {
 
 ## 将我的invitecode追加到脚本中，不会删除原作者的邀请码
 function Change_InviteCode {
-  CodeZz="  'Sy7sqHks\@Sa0zZlJapLMZw9pdDQnOoo2clfysC8H5a\@S5KkcRhgdoAeEI0jznP4OcQ\@SvPp0RRoR_VHRT0c\@S5KkcRkhIoFaGdhr8lvADfA',\n  'S5KkcRkpK8QLWdU7ykvMIdw\@SaG_llbW3LM1L9qFNQWOgo2Qw\@SaXzwlYqOIvhb-KpFTXua\@Sy7sqHksZ9VM',"
   CodeJoy=",\n  'i7J-rBjC1cY=\@9Lz36oup9_3x1O3gdANrI0MGRhplILGlq33N3lhoF4Q=\@TZaj4q_GSarkd-u40-hYJg==\@aEYNdH9WkHKZzdje-aDvWqt9zd5YaBeE\@7ZiMxCUnP2Orfc3eWGgXhA==',\n  'ZKfuxUZxKdGbDxTmAHnqkqt9zd5YaBeE\@xWXlN8vLwpFOy71e_SEYsg==\@ym8TOcaoUTQnJZKpDzKWd6t9zd5YaBeE\@9_dxd9S1-R7nohQ1FGiupUGIzB-QNOGN'"
-  CodeNian=",\n  'cgxZWifbeu-Wpm2AD0bol5Cu\@cgxZ-tAo8DJqM5xu3ogeOY7OXkOQ2Lw_ympGPITqNcceAad8Y1ph2UOXS-LOq3PUCqmgYjpt-td3CYw18qw\@cgxZdTXtIrzev12aC1eu5yr9cCz6N7HkgPrFkYPPzBDaaWjtjA3fokuFPMA\@cgxZLWaFIb7S4gvPZ1jlo3Ru3_zhiy3nnTsS4mQaaZc\@cgxZdTXtIuyLvwyYXgWh7YMhXtAVbaE0Ozjf2OUdEJZsvB1JgZ-5v5F_bDc',\n  'cgxZWifbeu_a6gmFRGbg6Lh1SmQdF0DUmQ\@cgxZdTXtIu6J7ljIXVGv6VoOs61gdyYXgT0ctAtCCykLsWw5accav11_0dI\@cgxZ-fMU8RF0M5dV3r4QOsLKNQRnjyuoh9haQkLPPMH6fJjgVIkoZy5ww_K-I2JJ\@cgxZ-OAB8S5NPaJF0LUYNl1oYE9tdRYPs2e2kWz3RrqEMgqutLWhZlw'"
-  perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+\n\])|\1${CodeZz}\n\2|" ${ScriptsDir}/jd_jdzz.js >/dev/null 2>&1
   perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+)(\n\];?)|\1\2${CodeJoy}\3|" ${ScriptsDir}/jd_crazy_joy.js >/dev/null 2>&1
-  perl -0777 -i -pe "s|(const inviteCodes = \[\n)(.+\n.+)(\n\];?)|\1\2${CodeNian}${CodeNian}\3|" ${ScriptsDir}/jd_nian.js >/dev/null 2>&1
 }
 
 ## 修改lxk0301大佬js文件的函数汇总
@@ -124,16 +142,17 @@ function Change_ALL {
     if [ -n "${Cookie1}" ]; then
       Count_UserSum
       Change_JoyRunPins
-      Change_InviteCode
+      # Change_InviteCode
     fi
   fi
 }
 
+## 检测文件：LXK9301/jd_scripts 仓库中的 docker/crontab_list.sh，和 shylocks/Loon 仓库中的 docker/crontab_list.sh
 ## 检测定时任务是否有变化，此函数会在Log文件夹下生成四个文件，分别为：
 ## task.list    crontab.list中的所有任务清单，仅保留脚本名
-## js.list      scripts/docker/crontab_list.sh文件中用来运行js脚本的清单（去掉后缀.js，非运行脚本的不会包括在内）
-## js-add.list  如果 scripts/docker/crontab_list.sh 增加了定时任务，这个文件内容将不为空
-## js-drop.list 如果 scripts/docker/crontab_list.sh 删除了定时任务，这个文件内容将不为空
+## js.list      上述检测文件中用来运行js脚本的清单（去掉后缀.js，非运行脚本的不会包括在内）
+## js-add.list  如果上述检测文件增加了定时任务，这个文件内容将不为空
+## js-drop.list 如果上述检测文件删除了定时任务，这个文件内容将不为空
 function Diff_Cron {
   if [ -f ${ListCron} ]; then
     if [ -n "${JD_DIR}" ]
@@ -142,7 +161,7 @@ function Diff_Cron {
     else
       grep "${ShellDir}/" ${ListCron} | grep -E " j[drx]_\w+" | perl -pe "s|.+ (j[drx]_\w+).*|\1|" | uniq | sort > ${ListTask}
     fi
-    grep -E "j[drx]_\w+\.js" ${ScriptsDir}/docker/crontab_list.sh | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort > ${ListJs}
+    cat ${ListCronLxk} ${ListCronShylocks} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort > ${ListJs}
     grep -vwf ${ListTask} ${ListJs} > ${ListJsAdd}
     grep -vwf ${ListJs} ${ListTask} > ${ListJsDrop}
   else
@@ -251,7 +270,8 @@ function Output_ListJsDrop {
 }
 
 ## 自动删除失效的脚本与定时任务，需要5个条件：1.AutoDelCron 设置为 true；2.正常更新js脚本，没有报错；3.js-drop.list不为空；4.crontab.list存在并且不为空；5.已经正常运行过npm install
-## 如果检测到某个定时任务在 scripts/docker/crontab_list.sh 中已删除，那么在本地也删除对应定时任务
+## 检测文件：LXK9301/jd_scripts 仓库中的 docker/crontab_list.sh，和 shylocks/Loon 仓库中的 docker/crontab_list.sh
+## 如果检测到某个定时任务在上述检测文件中已删除，那么在本地也删除对应定时任务
 function Del_Cron {
   if [ "${AutoDelCron}" = "true" ] && [ -s ${ListJsDrop} ] && [ -s ${ListCron} ] && [ -d ${ScriptsDir}/node_modules ]; then
     echo -e "开始尝试自动删除定时任务如下：\n"
@@ -274,8 +294,9 @@ function Del_Cron {
 }
 
 ## 自动增加新的定时任务，需要5个条件：1.AutoAddCron 设置为 true；2.正常更新js脚本，没有报错；3.js-add.list不为空；4.crontab.list存在并且不为空；5.已经正常运行过npm install
-## 如果检测到 scripts/docker/crontab_list.sh 中增加新的定时任务，那么在本地也增加
-## 本功能生效时，会自动从 scripts/docker/crontab_list.sh 文件新增加的任务中读取时间，该时间为北京时间
+## 检测文件：LXK9301/jd_scripts 仓库中的 docker/crontab_list.sh，和 shylocks/Loon 仓库中的 docker/crontab_list.sh
+## 如果检测到检测文件中增加新的定时任务，那么在本地也增加
+## 本功能生效时，会自动从检测文件新增加的任务中读取时间，该时间为北京时间
 function Add_Cron {
   if [ "${AutoAddCron}" = "true" ] && [ -s ${ListJsAdd} ] && [ -s ${ListCron} ] && [ -d ${ScriptsDir}/node_modules ]; then
     echo -e "开始尝试自动添加定时任务如下：\n"
@@ -289,7 +310,7 @@ function Add_Cron {
       then
         echo "4 0,9 * * * bash ${ShellJd} ${Cron}" >> ${ListCron}
       else
-        grep -E "\/${Cron}\." "${ScriptsDir}/docker/crontab_list.sh" | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" >> ${ListCron}
+        cat ${ListCronLxk} ${ListCronShylocks} | grep -E "\/${Cron}\." | perl -pe "s|(^.+)node */scripts/(j[drx]_\w+)\.js.+|\1bash ${ShellJd} \2|" >> ${ListCron}
       fi
     done
 
@@ -313,10 +334,7 @@ function Add_Cron {
   fi
 }
 
-## 每天定时任务中git_pull.sh只执行2次
-## 每天12:00前运行git_pull.sh时随机生成当天下午执行git_pull.sh的任务时间，生成的时间范围：13:00-20:59
-## 每天12:00后运行git_pull.sh时随机生成第二天上行执行git_pull.sh的任务时间，生成的时间范围：7:00-11:59
-## 不影响手动执行，手动执行会刷新下一次git_pull.sh的执行时间
+## 更新crontab
 function Update_Cron {
   # RanMin=$((${RANDOM} % 60))
   # if [ $(date "+%H") -ge 12 ]; then
@@ -324,9 +342,9 @@ function Update_Cron {
   # else
   #   RanHour=$((${RANDOM} % 8 + 13))
   # fi
-  RanMin=55
-  RanHour="5-23"
-  perl -i -pe "{s|18 10,14(.+jd_joy_run.*)|18 11,14\1|; s|10 10,11(.+jd_joy_run.*)|18 11,14\1|; s|.+(bash.+git_pull.*)|${RanMin} ${RanHour} * * * \1|; s|bash bash |bash |}" ${ListCron}
+  # RanMin=55
+  # RanHour="5-23"
+  # perl -i -pe "{s|18 10,14(.+jd_joy_run.*)|18 11,14\1|; s|10 10,11(.+jd_joy_run.*)|18 11,14\1|; s|bash bash |bash |}" ${ListCron}
   crontab ${ListCron}
 }
 
@@ -366,10 +384,23 @@ if [ ${ExitStatusShell} -eq 0 ]; then
   else
     Git_CloneScripts
   fi
+
+#  if [[ ${EnableShylocksScripts} == true ]]; then
+    if [ -d ${Scripts2Dir}/.git ]; then
+      Git_PullScripts2
+    else
+      Git_CloneScripts2
+    fi
+    ShylocksList=$(cd ${Scripts2Dir}; ls jd_*.js)
+    for file in ${ShylocksList}
+    do
+      cp -f ${Scripts2Dir}/${file} ${ScriptsDir}
+    done
+#  fi
 fi
 
 ## 执行各函数
-if [ ${ExitStatusScripts} -eq 0 ]
+if [[ ${ExitStatusScripts} -eq 0 ]]
 then
   echo -e "js脚本更新完成...\n"
   Change_ALL

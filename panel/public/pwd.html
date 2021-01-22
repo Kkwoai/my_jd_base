@@ -38,7 +38,7 @@
 			$user = $(".username").val();
 			$password = $(".password").val();
 			let timeStamp = (new Date()).getTime()
-			$.post('/changepass?t='+timeStamp, { username: $user, password: $password }, function (data) {
+			$.post('./changepass?t='+timeStamp, { username: $user, password: $password }, function (data) {
 				let icon = (data.err == 0) ? "success" : "error"
 				Swal.fire({
 					text: data.msg,

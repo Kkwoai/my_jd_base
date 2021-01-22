@@ -21,7 +21,7 @@ var sampleFile = path.join(rootPath,'sample/config.sh.sample');
 // crontab.list 文件所在目录
 var crontabFile = path.join(rootPath,'config/crontab.list');
 // config.sh 文件备份目录
-var confBakDir = path.join(rootPath,'config/bak/');;
+var confBakDir = path.join(rootPath,'config/bak/');
 // auth.json 文件目录
 var authConfigFile = path.join(rootPath,'config/auth.json');
 // logs文件目录
@@ -30,7 +30,7 @@ var logs = path.join(rootPath,'log/');
 var authError = "错误的用户名密码，请重试";
 var loginFaild = "请先登录!";
 
-var configString = "config sample crontab";
+var configString = "config sample crontab shareCode diy";
 
 var s_token, cookies, guid, lsid, lstoken, okl_token, token, userCookie = ""
 
@@ -208,10 +208,14 @@ function bakConfFile(file) {
             oldConfContent = getFileContentByName(crontabFile);
             fs.writeFileSync(bakConfFile, oldConfContent);
             break;
+        case "diy.sh":
+            oldConfContent = getFileContentByName(diyFile);
+            fs.writeFileSync(bakConfFile, oldConfContent);
+            break;
         default:
             break;
     }
-    
+
 }
 
 /**
@@ -226,6 +230,9 @@ function saveNewConf(file, content) {
             break;
         case "crontab.list":
             fs.writeFileSync(crontabFile, content);
+            break;
+        case "diy.sh":
+            fs.writeFileSync(diyFile, content);
             break;
         default:
             break;
@@ -242,6 +249,32 @@ function getFileContentByName(fileName) {
         return fs.readFileSync(fileName, 'utf8');
     }
     return '';
+}
+
+/**
+ * 获取目录中最后修改的文件的路径
+ * @param dir 目录路径
+ * @returns {string} 最新文件路径
+ */
+function getLastModifyFilePath(dir) {
+    var filePath = '';
+
+    if (fs.existsSync(dir)) {
+        var lastmtime = 0;
+
+        var arr = fs.readdirSync(dir);
+
+	    arr.forEach(function(item) {
+		    var fullpath = path.join(dir,item);
+		    var stats = fs.statSync(fullpath);
+		    if (stats.isFile()) {
+                if (stats.mtimeMs >= lastmtime) {
+                    filePath = fullpath;
+                }
+            }
+        });
+    }
+    return filePath;
 }
 
 
@@ -304,7 +337,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 app.get('/', function (request, response) {
     if (request.session.loggedin) {
-        response.redirect('/home');
+        response.redirect('./home');
     } else {
         response.sendFile(path.join(__dirname + '/public/auth.html'));
     }
@@ -317,7 +350,7 @@ app.get('/changepwd', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/pwd.html'));
     } else {
-        response.redirect('/');
+        response.redirect('./');
     }
 });
 
@@ -386,6 +419,13 @@ app.get('/api/config/:key', function (request, response) {
                 case 'crontab':
                     content = getFileContentByName(crontabFile);
                     break;
+                case 'shareCode':
+                    let shareCodeFile = getLastModifyFilePath(shareCodeDir);
+                    content = getFileContentByName(shareCodeFile);
+                    break;
+                case 'diy':
+                    content = getFileContentByName(diyFile);
+                    break;
                 default:
                     break;
             }
@@ -406,7 +446,7 @@ app.get('/home', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/home.html'));
     } else {
-        response.redirect('/');
+        response.redirect('./');
     }
 
 });
@@ -418,7 +458,19 @@ app.get('/diff', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/diff.html'));
     } else {
-        response.redirect('/');
+        response.redirect('./');
+    }
+
+});
+
+/**
+ * Share Code 页面
+ */
+app.get('/shareCode', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(path.join(__dirname + '/public/shareCode.html'));
+    } else {
+        response.redirect('./');
     }
 
 });
@@ -430,7 +482,19 @@ app.get('/crontab', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/crontab.html'));
     } else {
-        response.redirect('/');
+        response.redirect('./');
+    }
+
+});
+
+/**
+ * 自定义脚本 页面
+ */
+app.get('/diy', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(path.join(__dirname + '/public/diy.html'));
+    } else {
+        response.redirect('./');
     }
 
 });
@@ -491,7 +555,7 @@ app.post('/changepass', function (request, response) {
  */
 app.get('/logout', function (request, response) {
     request.session.destroy()
-    response.redirect('/');
+    response.redirect('./');
 
 });
 

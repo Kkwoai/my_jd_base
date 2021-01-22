@@ -33,8 +33,6 @@ fi
 echo
 [ ! -d ${JD_DIR}/log ] && mkdir -p ${JD_DIR}/log
 crond
-
-echo -e "========================2. 检测配置文件========================\n"
 if [ -d ${JD_DIR}/config ]
 then
 
@@ -67,6 +65,10 @@ else
   echo -e "没有映射config配置目录给本容器，请先按教程映射config配置目录...\n"
   exit 1
 fi
+
+echo -e "\n========================2. 更新源代码========================\n"
+bash git_pull
+echo
 
 echo -e "========================3. 启动挂机程序========================\n"
 if [[ ${ENABLE_HANGUP} == true ]]; then
