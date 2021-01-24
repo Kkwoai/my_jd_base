@@ -575,16 +575,16 @@ app.post('/api/save', function (request, response) {
 
 });
 
-/**
- * 日志查询 页面
- */
-app.get('/log', function (request, response) {
-    if (request.session.loggedin) {
-        response.sendFile(path.join(__dirname + '/public/tasklog.html'));
-    } else {
-        response.redirect('./');
-    }
-});
+// /**
+//  * 日志查询 页面
+//  */
+// app.get('/log', function (request, response) {
+//     if (request.session.loggedin) {
+//         response.sendFile(path.join(__dirname + '/public/tasklog.html'));
+//     } else {
+//         response.redirect('./');
+//     }
+// });
 
 /**
  * 日志列表
