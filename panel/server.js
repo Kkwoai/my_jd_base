@@ -23,19 +23,9 @@ var crontabFile = path.join(rootPath, 'config/crontab.list');
 // config.sh 文件备份目录
 var confBakDir = path.join(rootPath, 'config/bak/');
 // auth.json 文件目录
-<<<<<<< HEAD
 var authConfigFile = path.join(rootPath,'config/auth.json');
 // logs文件目录
 var logs = path.join(rootPath,'log/');
-=======
-var authConfigFile = path.join(rootPath, 'config/auth.json');
-// Share Code 文件目录
-var shareCodeDir = path.join(rootPath, 'log/jd_get_share_code/');
-// diy.sh 文件目录
-var diyFile = path.join(rootPath, 'config/diy.sh');
-// 日志目录
-var logPath = path.join(rootPath, 'log/');
->>>>>>> v3
 
 var authError = "错误的用户名密码，请重试";
 var loginFaild = "请先登录!";

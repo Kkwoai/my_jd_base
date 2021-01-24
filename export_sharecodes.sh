@@ -59,39 +59,11 @@ function Cat_ScodesImmortal {
 
 ## 汇总
 function Cat_All {
-<<<<<<< HEAD
-  echo -e "本脚本从最后一个正常的日志中寻找互助码，某些账号缺失则代表在最后一个正常的日志中没有找到。"
-  echo -e "\n东东农场："
-  Cat_Scodes fruit "的东东农场好友互助码" | perl -pe "s|的东东农场好友互助码||g"
-  echo -e "\n东东萌宠："
-  Cat_Scodes pet "的东东萌宠好友互助码" | perl -pe "s|的东东萌宠好友互助码||g"
-  echo -e "\n种豆得豆："
-  Cat_Scodes plantBean "的京东种豆得豆好友互助码" | perl -pe "s|的京东种豆得豆好友互助码||g"
-  echo -e "\n京喜工厂："
-  Cat_Scodes dreamFactory "的京喜工厂好友互助码" | perl -pe "s|的京喜工厂好友互助码||g"
-  echo -e "\n东东工厂："
-  Cat_Scodes jdfactory "的东东工厂好友互助码" | perl -pe "s|的东东工厂好友互助码||g"
-  echo -e "\n疯狂的JOY："
-  Cat_Scodes crazy_joy "的crazyJoy任务好友互助码" | perl -pe "s|的crazyJoy任务好友互助码||g"
-  echo -e "\n京东赚赚："
-  Cat_Scodes jdzz "的京东赚赚好友互助码" | perl -pe "s|的京东赚赚好友互助码||g"
-  echo -e "\n京喜农场："
-  Cat_Scodes jxnc "的京喜农场好友互助码" | perl -pe "s|的京喜农场好友互助码||g"
-  echo -e "\n口袋书店："
-  Cat_ScodesBookShop
-  echo -e "\n签到领现金："
-  Cat_ScodesCash
-  echo -e "\n炸年兽："
-  Cat_ScodesNian
-  echo -e "\n神仙书院："
-  Cat_ScodesImmortal
-=======
   echo -e "\n本脚本从最后一个正常的日志中寻找互助码，某些账号缺失则代表在最后一个正常的日志中没有找到。"
   for ((i=0; i<${#Name1[*]}; i++)); do
     echo -e "\n${Name2[i]}："
     [[ $(Cat_Scodes "${Name1[i]}" "的${Name2[i]}好友互助码") == ${Tips} ]] && Cat_Scodes "${Name1[i]}" || Cat_Scodes "${Name1[i]}" "的${Name2[i]}好友互助码"
   done
->>>>>>> v3
 }
 
 ## 执行并写入日志
