@@ -2,25 +2,18 @@
 
 ## Author: Evine Deng
 ## Source: https://github.com/EvineDeng/jd-base
-## Modified： 2021-01-20
-## Version： v3.6.15
+## Modified： 2021-01-23
+## Version： v3.6.17
 
 ## 路径
-if [ -z "${JD_DIR}" ]
-then
-  ShellDir=$(cd $(dirname $0); pwd)
-  HelpJd=jd.sh
-else
-  ShellDir=${JD_DIR}
-  HelpJd=jd
-fi
-
+ShellDir=${JD_DIR:-$(cd $(dirname $0); pwd)}
+[ ${JD_DIR} ] && HelpJd=jd || HelpJd=jd.sh
 ScriptsDir=${ShellDir}/scripts
 ConfigDir=${ShellDir}/config
 FileConf=${ConfigDir}/config.sh
 FileConfSample=${ShellDir}/sample/config.sh.sample
 LogDir=${ShellDir}/log
-ListScripts=$(ls ${ScriptsDir} | grep -E "j[drx]_\w+\.js" | perl -pe "s|\.js||")
+ListScripts=$(ls ${ScriptsDir} | grep -E "j[drx]_\w+\.js")
 ListCron=${ConfigDir}/crontab.list
 
 ## 导入config.sh
@@ -48,16 +41,10 @@ function Detect_Cron {
 ## 用户数量UserSum
 function Count_UserSum {
   i=1
-  while [ $i -le 1000 ]
-  do
+  while [ $i -le 1000 ]; do
     Tmp=Cookie$i
     CookieTmp=${!Tmp}
-    if [ -n "${CookieTmp}" ]
-    then
-      UserSum=$i
-    else
-      break
-    fi
+    [[ ${CookieTmp} ]] && UserSum=$i || break
     let i++
   done
 }
@@ -173,7 +160,9 @@ function Help {
   echo -e "3. bash ${HelpJd} hangup   # 重启挂机程序\n"
   echo -e "4. bash ${HelpJd} resetpwd # 重置控制面板用户名和密码\n"
   echo -e "针对用法1、用法2中的\"xxx\"，无需输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略...\n"
-  echo -e "当前有以下脚本可以运行（包括尚未被lxk0301大佬放进docker下crontab的脚本，但不含自定义脚本）：\n${ListScripts}\n"
+  echo -e "当前有以下脚本可以运行（包括尚未被lxk0301大佬放进docker下crontab的脚本，但不含自定义脚本）：\n"
+  cd ${ScriptsDir}
+  ls ${ListScripts}
 }
 
 ## nohup
