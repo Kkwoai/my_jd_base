@@ -57,6 +57,26 @@ function Cat_ScodesCash {
   done
   echo ${codes}
 }
+## 导出炸年兽互助码
+function Cat_ScodesNian {
+  cd ${LogDir}/jd_nian
+  for log in $(ls -r)
+  do
+    codes=$(perl -0777 -pe "s|\*+\n+||g" ${log} | grep -${Opt} "您的助力码为" | perl -pe "{s|\*+开始||g; s|您的助力码为|：|g}")
+    [ -n "${codes}" ] && break
+  done
+  echo ${codes}
+}
+## 导出神仙书院互助码
+function Cat_ScodesImmortal {
+  cd ${LogDir}/jd_immortal
+  for log in $(ls -r)
+  do
+    codes=$(perl -0777 -pe "s|\*+\n+||g" ${log} | grep -${Opt} "您的助力码为" | perl -pe "{s|\*+开始||g; s|您的助力码为|：|g}")
+    [ -n "${codes}" ] && break
+  done
+  echo ${codes}
+}
 
 ## 汇总
 function Cat_All {
@@ -81,6 +101,10 @@ function Cat_All {
   Cat_ScodesBookShop
   echo -e "\n签到领现金："
   Cat_ScodesCash
+  echo -e "\n炸年兽："
+  Cat_ScodesNian
+  echo -e "\n神仙书院："
+  Cat_ScodesImmortal
 }
 
 ## 执行并写入日志
