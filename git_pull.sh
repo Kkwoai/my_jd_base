@@ -3,8 +3,8 @@
 ## Author: Evine Deng
 
 ## Source: https://github.com/Kkwoai/my_jd_base
-## Modified： 2021-01-17
-## Version： v3.5.3
+## Modified： 2021-01-29
+## Version： v3.5.4
 
 ## 文件路径、脚本网址、文件版本以及各种环境的判断
 ShellDir=${JD_DIR:-$(cd $(dirname $0); pwd)}

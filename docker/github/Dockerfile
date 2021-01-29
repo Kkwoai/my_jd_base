@@ -1,9 +1,9 @@
 FROM node:lts-alpine
 LABEL maintainer="Evine Deng <evinedeng@foxmail.com>"
-ARG JD_BASE_URL=https://github.com/Kkwoai/my_jd-base
+ARG JD_BASE_URL=https://github.com/Kkwoai/my_jd_base.git
 ARG JD_BASE_BRANCH=mybranch
-ARG JD_SCRIPTS_URL=https://github.com/Kkwoai/my_jd_scripts
-ARG JD_SCRIPTS_BRANCH=my_jd_base
+ARG JD_SCRIPTS_URL=https://github.com/Kkwoai/my_jd_scripts.git
+ARG JD_SCRIPTS_BRANCH=my_jd_scripts
 # ARG JD_SCRIPTS2_URL=https://github.com/shylocks/Loon
 # ARG JD_SCRIPTS2_BRANCH=main
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
