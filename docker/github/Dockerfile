@@ -37,7 +37,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cd ${JD_DIR}/scripts \
     && npm install \
     && npm install -g pm2 \
-    && git clone -b ${JD_SCRIPTS2_BRANCH} ${JD_SCRIPTS2_URL} ${JD_DIR}/scripts2 \
+    # && git clone -b ${JD_SCRIPTS2_BRANCH} ${JD_SCRIPTS2_URL} ${JD_DIR}/scripts2 \
     && ln -sf ${JD_DIR}/jd.sh /usr/local/bin/jd \
     && ln -sf ${JD_DIR}/git_pull.sh /usr/local/bin/git_pull \
     && ln -sf ${JD_DIR}/rm_log.sh /usr/local/bin/rm_log \
