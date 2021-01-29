@@ -41,3 +41,6 @@
 ## Star趋势
 
 [![Stargazers over time](https://starchart.cc/EvineDeng/jd-base.svg)](https://starchart.cc/EvineDeng/jd-base)
+
+
+centos 无权限问题结局办法 docker run -dit -v /home/myjd/jd/config:/jd/config -v /home/myjd/jd/log:/jd/log  -p 5678:5678 --name myjd --hostname myjd --restart always --privileged=true kabasijiniu/myjd:latest
