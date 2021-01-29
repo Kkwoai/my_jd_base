@@ -1,13 +1,12 @@
 FROM node:lts-alpine
 LABEL maintainer="Evine Deng <evinedeng@foxmail.com>"
-ARG JD_BASE_URL=https://github.com/kkwoai/my_jd_base
+ARG JD_BASE_URL=https://github.com/Kkwoai/my_jd-base
 ARG JD_BASE_BRANCH=mybranch
 ARG JD_SCRIPTS_URL=https://github.com/Kkwoai/my_jd_scripts
-ARG JD_SCRIPTS_BRANCH=my_jd_scripts
-ARG JD_SCRIPTS2_URL=https://github.com/shylocks/Loon
-ARG JD_SCRIPTS2_BRANCH=main
+ARG JD_SCRIPTS_BRANCH=my_jd_base
+# ARG JD_SCRIPTS2_URL=https://github.com/shylocks/Loon
+# ARG JD_SCRIPTS2_BRANCH=main
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-  
     LANG=zh_CN.UTF-8 \
     SHELL=/bin/bash \
     PS1="\u@\h:\w \$ " \
@@ -44,6 +43,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && ln -sf ${JD_DIR}/export_sharecodes.sh /usr/local/bin/export_sharecodes \
     && cp -f ${JD_DIR}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh \
     && chmod 777 /usr/local/bin/docker-entrypoint.sh \
-    && rm -rf /root/.npm    
+    && rm -rf /root/.npm
 WORKDIR ${JD_DIR}
 ENTRYPOINT docker-entrypoint.sh

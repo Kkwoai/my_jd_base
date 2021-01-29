@@ -1,36 +1,7 @@
 #!/bin/bash
 set -e
 
-# echo -e "\n========================1. 更新源代码========================\n"
-
-# WhichDep=$(grep "/jd-base" "${JD_DIR}/.git/config")
-echo -e "\n========================2. 更新源代码========================\n"
-# if [[ ${WhichDep} == *github* ]]; then
-ScriptsURL=https://github.com/Kkwoai/my_jd_scripts
-ShellURL=https://github.com/Kkwoai/my_jd_base
-# else
-#   ScriptsURL=https://gitee.com/lxk0301/jd_scripts
-#   ShellURL=https://gitee.com/evine/jd-base
-# fi
-
-echo -e "更新shell脚本，原地址：${ShellURL}\n"
-cd ${JD_DIR}
-git fetch --all
-git reset --hard origin/mybranch
-echo
-
-if [ -d ${JD_DIR}/scripts/.git ]; then
-  echo -e "更新JS脚本，原地址：${ScriptsURL}\n"
-  cd ${JD_DIR}/scripts
-  PackageListOld=$(cat package.json)
-  git fetch --all
-  git reset --hard origin/my_jd_scripts
-else
-  echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
-  git clone -b my_jd_scripts ${ScriptsURL} ${JD_DIR}/scripts
-
-fi
-echo
+echo -e "========================1. 检测配置文件========================\n"
 [ ! -d ${JD_DIR}/log ] && mkdir -p ${JD_DIR}/log
 crond
 if [ -d ${JD_DIR}/config ]
