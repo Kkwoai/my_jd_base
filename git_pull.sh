@@ -2,7 +2,7 @@
 
 ## Author: Evine Deng
 
-## Source: https://github.com/Kkwoai/my_jd_base
+## Source: https://github.com/Kkwoai/tmp123
 ## Modified： 2021-01-29
 ## Version： v3.5.4
 
@@ -33,7 +33,7 @@ WhichDep=$(grep "/jd-base" "${ShellDir}/.git/config")
 Scripts2URL=https://github.com/shylocks/Loon
 
 # if [[ ${WhichDep} == *github* ]]; then
-ScriptsURL=https://github.com/Kkwoai/my_jd_scripts
+ScriptsURL=https://github.com/Kkwoai/tmp123
 ShellURL=https://github.com/Kkwoai/my_jd_base
 # else
 #   ScriptsURL=https://gitee.com/lxk0301/jd_scripts
@@ -52,7 +52,7 @@ function Git_PullShell {
 ## 克隆scripts
 function Git_CloneScripts {
   echo -e "克隆JS脚本，原地址：${ScriptsURL}\n"
-  git clone -b my_jd_scripts ${ScriptsURL} ${ScriptsDir}
+  git clone -b master ${ScriptsURL} ${ScriptsDir}
   ExitStatusScripts=$?
   echo
 }
@@ -63,7 +63,7 @@ function Git_PullScripts {
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
-  git reset --hard origin/my_jd_scripts
+  git reset --hard origin/master
   echo
 }
 
